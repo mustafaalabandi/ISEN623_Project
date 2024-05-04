@@ -1,1 +1,44 @@
+sets
+i /P1, P2, P3, P4, P5/;
+
+parameters
+D(i) /P1 18050
+      P2 34026
+      P3 35980
+      P4 13404
+      P5 24576/
+Pr(i) /P1 153120
+       P2 153120
+       P3 153120
+       P4 153120
+       P5 153120/
+H(i) /P1 66
+      P2 84
+      P3 87.84
+      P4 60
+      P5 60/
+St(i) /P1 4
+       P2 6
+       P3 10
+       P4 8
+       P5 12/
+S(i) /P1 400
+      P2 600
+      P3 1000
+      P4 800
+      P5 1200/;
+
+integer variable N;
+N.lo = 1;
+free variable TRC;
+
+equations obj, const1;
+
+obj.. sum(i, N*S(i)) + sum(i, 0.5*power(N,-1)*H(i)*D(i)*(1- D(i)*power(Pr(i),-1))) =E= TRC;
+
+const1.. 3840 - sum(i, 3840*D(i)*power(Pr(i),-1)) - sum(i, N*St(i)) =G= 0;
+
+model MINLP1 /all/;
+option MINLP = LINDO;
+Solve MINLP1 using MINLP minimizing TRC;
 
